@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace GroupOneMovieStoreAppFinal
@@ -6,10 +7,13 @@ namespace GroupOneMovieStoreAppFinal
     public partial class frmRentalStore : Form
     {
         private User _currentUser;
+        private Movie _currentMovie;
 
         public frmRentalStore(User currentUser)
         {
             InitializeComponent();
+            _currentUser = currentUser;
+
             Load += frmRentalStore_Load;
             cbxTitleLibrary.SelectedIndexChanged += cbxTitleLibrary_SelectedIndexChanged;
         }
@@ -17,18 +21,24 @@ namespace GroupOneMovieStoreAppFinal
         private void frmRentalStore_Load(object sender, EventArgs e)
         {
             AdminDB.LoadUsers();
+            MovieLibraryDB.LoadMovies();
+            RefreshMovieComboBox();
 
-            cbxTitleLibrary.DataSource = AdminDB.Users;
-            cbxTitleLibrary.DisplayMember = "Username";
+            btnAdminControls.Enabled = _currentUser != null && _currentUser.IsAdmin;
+        }
+
+        private void RefreshMovieComboBox()
+        {
+            cbxTitleLibrary.DataSource = MovieLibraryDB.Movies
+                .Where(m => !m.IsCheckedOut)
+                .ToList();
+            cbxTitleLibrary.DisplayMember = "Title";
             cbxTitleLibrary.SelectedIndex = -1;
-
-            btnAdminControls.Enabled = false;
         }
 
         private void cbxTitleLibrary_SelectedIndexChanged(object sender, EventArgs e)
         {
-            _currentUser = cbxTitleLibrary.SelectedItem as User;
-            btnAdminControls.Enabled = _currentUser != null && _currentUser.IsAdmin;
+            _currentMovie = cbxTitleLibrary.SelectedItem as Movie;
         }
 
         private void btnAdminControls_Click(object sender, EventArgs e)
@@ -38,55 +48,50 @@ namespace GroupOneMovieStoreAppFinal
                 MessageBox.Show("Admin access required.");
                 return;
             }
-
             new frmAdminControls().ShowDialog();
         }
 
         private void btnCheckOut_Click(object sender, EventArgs e)
         {
-            // VALIDATION
-            if (_currentUser == null)
+            if (_currentUser == null || _currentMovie == null)
             {
-                MessageBox.Show("Please select a user.");
+                MessageBox.Show("Select a user and a movie.");
                 return;
             }
 
-            if (!Validators.IsNotEmpty(txtFirstName.Text))
+            if (!Validators.IsNotEmpty(txtFirstName.Text) ||
+                !Validators.IsNotEmpty(txtLastName.Text) ||
+                !Validators.IsNotEmpty(txtContactInfo.Text))
             {
-                MessageBox.Show("First name is required.");
-                txtFirstName.Focus();
+                MessageBox.Show("All customer fields are required.");
                 return;
             }
 
-            if (!Validators.IsNotEmpty(txtLastName.Text))
-            {
-                MessageBox.Show("Last name is required.");
-                txtLastName.Focus();
-                return;
-            }
-
-            if (!Validators.IsNotEmpty(txtContactInfo.Text))
-            {
-                MessageBox.Show("Contact information is required.");
-                txtContactInfo.Focus();
-                return;
-            }
+            _currentMovie.IsCheckedOut = true;
+            MovieLibraryDB.SaveMovies();
 
             txtResults.Text =
                 $"User: {_currentUser.Username}\r\n" +
                 $"Customer: {txtFirstName.Text} {txtLastName.Text}\r\n" +
-                $"Contact: {txtContactInfo.Text}";
+                $"Contact: {txtContactInfo.Text}\r\n" +
+                $"Checked Out: {_currentMovie.Title}";
+
+            RefreshMovieComboBox();
         }
 
         private void btnCheckIn_Click(object sender, EventArgs e)
         {
-            if (_currentUser == null)
+            if (_currentMovie == null)
             {
-                MessageBox.Show("Please select a user.");
+                MessageBox.Show("Select a movie to check in.");
                 return;
             }
 
-            txtResults.Text = "Movie checked in.";
+            _currentMovie.IsCheckedOut = false;
+            MovieLibraryDB.SaveMovies();
+
+            txtResults.Text = $"Movie checked in: {_currentMovie.Title}";
+            RefreshMovieComboBox();
         }
 
         private void btnExit_Click(object sender, EventArgs e)

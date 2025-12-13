@@ -5,17 +5,25 @@ namespace GroupOneMovieStoreAppFinal
 {
     internal static class Program
     {
-        public static User CurrentUser;
-
         [STAThread]
         static void Main()
         {
-            ApplicationConfiguration.Initialize();
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
 
+            // Load users
             AdminDB.LoadUsers();
-            CurrentUser = AdminDB.GetDefaultUser();
 
-            Application.Run(new frmRentalStore(CurrentUser));
+            // For demo, use first user (admin)
+            User currentUser = AdminDB.Users.Count > 0 ? AdminDB.Users[0] : null;
+
+            if (currentUser == null)
+            {
+                MessageBox.Show("No users found. Add users in AdminDB.");
+                return;
+            }
+
+            Application.Run(new frmRentalStore(currentUser));
         }
     }
 }

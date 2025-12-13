@@ -1,25 +1,24 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace GroupOneMovieStoreAppFinal
 {
     public static class AdminDB
     {
-        public static List<User> Users { get; private set; }
+        public static List<User> Users { get; set; } = new List<User>();
 
         public static void LoadUsers()
         {
-            Users = new List<User>
+            if (Users.Count == 0)
             {
-                new User("Sam", true),
-                new User("Employee", false)
-            };
+                Users.Add(new User("admin", true));
+                Users.Add(new User("john", false));
+                Users.Add(new User("jane", false));
+            }
         }
 
-        public static User GetDefaultUser()
+        public static void SaveUsers()
         {
-            return Users.FirstOrDefault(u => u.IsAdmin)
-                   ?? Users.FirstOrDefault();
+            // For in-memory demo, no action needed.
         }
     }
 }

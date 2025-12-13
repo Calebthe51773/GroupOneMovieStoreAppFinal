@@ -2,9 +2,9 @@
 {
     public static class Validators
     {
-        public static bool IsNotEmpty(string value)
+        public static bool IsNotEmpty(string input)
         {
-            return !string.IsNullOrWhiteSpace(value);
+            return !string.IsNullOrWhiteSpace(input);
         }
     }
 }
