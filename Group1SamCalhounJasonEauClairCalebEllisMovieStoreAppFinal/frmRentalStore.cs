@@ -11,7 +11,7 @@ namespace GroupOneMovieStoreAppFinal
         private List<Users> users;
         private void frmRentalStore_Load(object sender, EventArgs e)
         {
-            library = MovieLibraryDB.GetTitles();
+            library = MovieLibraryDB.GetLibrary();
             RefreshLibraryComboBox();
         }
 
@@ -33,12 +33,9 @@ namespace GroupOneMovieStoreAppFinal
                 if (user.FirstName == txtFirstName.Text && user.LastName == txtLastName.Text && user.ContactInfo == txtContactInfo.Text)
                 {
                     foundUser = true;
-                    return foundUser;
+                    break;
                 }
-                else
-                {
-                    return foundUser;
-                }
+            return foundUser;
         }
         private void btnAdminControls_Click(object sender, EventArgs e)
         {

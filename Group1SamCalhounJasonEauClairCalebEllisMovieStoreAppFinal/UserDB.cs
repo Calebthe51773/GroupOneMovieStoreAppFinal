@@ -9,7 +9,7 @@ namespace GroupOneMovieStoreAppFinal
     public static class UserDB
     {
         private const string dir = @"C:\C#\Files\";
-        private const string path = dir + "Customers.txt";
+        private const string path = dir + "Users.txt";
 
         public static void SaveUsers(List<Users> users)
         {
@@ -22,7 +22,7 @@ namespace GroupOneMovieStoreAppFinal
                 textOut.Write(user.FirstName + "|");
                 textOut.Write(user.LastName + "|");
                 textOut.Write(user.ContactInfo + "|");
-                textOut.Write(user.IsAdmin.ToString() + "|");
+                textOut.WriteLine(user.IsAdmin.ToString());
             }
 
             textOut.Close();

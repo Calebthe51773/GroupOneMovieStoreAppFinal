@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GroupOneMovieStoreAppFinal;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -21,7 +22,7 @@ namespace GroupOneMovieStoreAppFinal
         private void frmAdminControls_Load(object sender, EventArgs e) 
         {
             users = UserDB.GetUsers();
-            library = MovieLibraryDB.GetTitles();
+            library = MovieLibraryDB.GetLibrary();
             RefreshListBoxes();
 
         }

@@ -6,27 +6,30 @@ using System.Threading.Tasks;
 
 namespace GroupOneMovieStoreAppFinal
 {
-    public static class MovieLibraryDB
+    internal class MovieLibraryDB
     {
         private const string dir = @"C:\C#\Files\";
-        private const string path = dir + "Customers.txt";
+        private const string path = dir + "MovieLibrary.txt";
 
         public static void SaveTitles(List<Titles> titles)
         {
+            // create the output stream for a text file that exists
             StreamWriter textOut =
                 new StreamWriter(
                 new FileStream(path, FileMode.Create, FileAccess.Write));
 
+            // write each customer
             foreach (Titles title in titles)
             {
                 textOut.Write(title.TitleName + "|");
-                textOut.WriteLine(title.CheckedOut.ToString());
+                textOut.WriteLine(title.CheckDate.ToString());
             }
 
+            // write the end of the document
             textOut.Close();
         }
 
-        public static List<Titles> GetTitles()
+        public static List<Titles> GetLibrary()
         {
             if (!Directory.Exists(dir))
                 Directory.CreateDirectory(dir);
@@ -44,7 +47,7 @@ namespace GroupOneMovieStoreAppFinal
                 Titles title = new Titles
                 {
                     TitleName = columns[0],
-                    CheckedOut = Convert.ToBoolean(columns[1])
+                    CheckDate = DateTime.Parse(columns[1])
                 };
                 titles.Add(title);
             }
