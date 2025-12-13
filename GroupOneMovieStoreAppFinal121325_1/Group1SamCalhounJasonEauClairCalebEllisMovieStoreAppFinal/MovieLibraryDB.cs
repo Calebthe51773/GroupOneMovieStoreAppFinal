@@ -20,8 +20,7 @@ namespace GroupOneMovieStoreAppFinal
 
         public static void SaveMovies()
         {
-            // For in-memory demo, no action needed.
-            // For real DB, save changes here.
+            // In-memory demo, nothing to do. For real DB/file, save here.
         }
     }
 }

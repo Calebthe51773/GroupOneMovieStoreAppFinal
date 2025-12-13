@@ -53,9 +53,15 @@ namespace GroupOneMovieStoreAppFinal
 
         private void btnCheckOut_Click(object sender, EventArgs e)
         {
-            if (_currentUser == null || _currentMovie == null)
+            if (_currentUser == null)
             {
-                MessageBox.Show("Select a user and a movie.");
+                MessageBox.Show("Please select a user.");
+                return;
+            }
+
+            if (_currentMovie == null)
+            {
+                MessageBox.Show("Please select a movie to check out.");
                 return;
             }
 
@@ -67,14 +73,15 @@ namespace GroupOneMovieStoreAppFinal
                 return;
             }
 
-            _currentMovie.IsCheckedOut = true;
+            // Check out for 7 days
+            _currentMovie.CheckOut(7);
             MovieLibraryDB.SaveMovies();
 
             txtResults.Text =
                 $"User: {_currentUser.Username}\r\n" +
                 $"Customer: {txtFirstName.Text} {txtLastName.Text}\r\n" +
                 $"Contact: {txtContactInfo.Text}\r\n" +
-                $"Checked Out: {_currentMovie.Title}";
+                $"Checked Out: {_currentMovie.Title} (Due: {_currentMovie.DueDate?.ToShortDateString()})";
 
             RefreshMovieComboBox();
         }
@@ -83,11 +90,11 @@ namespace GroupOneMovieStoreAppFinal
         {
             if (_currentMovie == null)
             {
-                MessageBox.Show("Select a movie to check in.");
+                MessageBox.Show("Please select a movie to check in.");
                 return;
             }
 
-            _currentMovie.IsCheckedOut = false;
+            _currentMovie.CheckIn();
             MovieLibraryDB.SaveMovies();
 
             txtResults.Text = $"Movie checked in: {_currentMovie.Title}";
@@ -96,7 +103,14 @@ namespace GroupOneMovieStoreAppFinal
 
         private void btnExit_Click(object sender, EventArgs e)
         {
-            Close();
+            // Close the current form
+            this.Close();
+
+            // Optionally, exit the entire application if this is the main form
+            // Application.Exit();
         }
+
+
     }
 }
+
