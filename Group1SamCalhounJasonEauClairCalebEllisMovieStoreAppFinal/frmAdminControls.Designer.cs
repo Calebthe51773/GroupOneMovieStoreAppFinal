@@ -107,7 +107,7 @@
             btnReturnStore.TabIndex = 6;
             btnReturnStore.Text = "Return to Store";
             btnReturnStore.UseVisualStyleBackColor = true;
-            btnReturnStore.Click += this.btnReturnStore_Click;
+            btnReturnStore.Click += btnReturnStore_Click;
             // 
             // lstOverdue
             // 
@@ -164,6 +164,7 @@
             Controls.Add(btnAddAdmin);
             Name = "frmAdminControls";
             Text = "Administrative Controls";
+            Load += frmAdminControls_Load;
             ResumeLayout(false);
             PerformLayout();
         }

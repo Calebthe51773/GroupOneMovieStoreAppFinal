@@ -76,6 +76,7 @@
             // 
             // cbxTitleLibrary
             // 
+            cbxTitleLibrary.DropDownStyle = ComboBoxStyle.DropDownList;
             cbxTitleLibrary.FormattingEnabled = true;
             cbxTitleLibrary.Location = new Point(148, 102);
             cbxTitleLibrary.Name = "cbxTitleLibrary";
@@ -170,6 +171,7 @@
             Controls.Add(label1);
             Name = "frmRentalStore";
             Text = "Sam, Jason, and Caleb's Movie Shack";
+            Load += frmRentalStore_Load;
             ResumeLayout(false);
             PerformLayout();
         }
