@@ -21,13 +21,18 @@ namespace GroupOneMovieStoreAppFinal
             base.Dispose(disposing);
         }
 
+        private TextBox GetTxtResults()
+        {
+            return txtResults;
+        }
+
         #region Windows Form Designer generated code
 
         /// <summary>
         ///  Required method for Designer support - do not modify
         ///  the contents of this method with the code editor.
         /// </summary>
-        private void InitializeComponent()
+        private void InitializeComponent(TextBox txtResults)
         {
             label1 = new Label();
             txtFirstName = new TextBox();
